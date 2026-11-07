@@ -3,7 +3,7 @@ function salvarDados(chave, dados) {
   localStorage.setItem(chave, JSON.stringify(dados));
   console.log(`Dados salvos com sucesso na chave: ${chave}`);
 }
-//Buscar dados salvos
+//buscar dados salvos
 function carregarDados(chave) {
   const dados = localStorage.getItem(chave);
   console.log(`Dados carregados da chave: ${chave}`);
@@ -17,15 +17,15 @@ if (formTransacao) {
   formTransacao.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    //captura os valores do formulário
+    //pega os valores do formulário
     const descricao = document.getElementById('gasto-descricao').value;
     const valor = parseFloat(document.getElementById('gasto-valor').value);
     const tipo = document.getElementById('gasto-tipo').value;
     const categoria = document.getElementById('gasto-categoria').value;
 
-    //carrega as transações existentes
+    //da load nas transações existentes
     const transacoes = carregarDados('transacoes');
-    
+
     const novaTransacao = {
       id: Date.now(),
       descricao,
@@ -37,8 +37,39 @@ if (formTransacao) {
     transacoes.push(novaTransacao);
     salvarDados('transacoes', transacoes);
 
-    //Limpar o formulário
+    //limpa o formulário
     formTransacao.reset();
     alert('Transação registada com sucesso!');
   });
 }
+// função que atualiza a tabela de transações no ecrã
+function renderizarTabelaGastos() {
+  const tabela = document.getElementById('tabela-transacoes');
+  if (!tabela) return;
+
+  const transacoes = carregarDados('transacoes');
+  tabela.innerHTML = ''; // limpa antes de desenhar
+
+  transacoes.forEach((item) => {
+    const tr = document.createElement('tr');
+
+    // define a cor da badge consoante
+    const badgeCor = item.tipo === 'despesa' ? 'bg-danger' : 'bg-success';
+    const sinal = item.tipo === 'despesa' ? '-' : '+'; tr.innerHTML = `
+      <td>${item.descricao}</td>
+      <td><span class="badge bg-secondary">${item.categoria}</span></td>
+      <td><span class="badge ${badgeCor}">${item.tipo.toUpperCase()}</span></td>
+      <td class="fw-bold">${sinal} R$ ${item.valor.toFixed(2)}</td>
+      <td class="text-end">
+        <button class="btn btn-sm btn-outline-danger" onclick="removerGasto(${item.id})">
+          <i class="bi bi-trash"></i> Excluir
+        </button>
+      </td>
+    `;
+
+    tabela.appendChild(tr);
+  });
+}
+
+// executa a função
+renderizarTabelaGastos();
