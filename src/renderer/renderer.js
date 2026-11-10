@@ -42,7 +42,7 @@ if (formTransacao) {
     alert('Transação registada com sucesso!');
   });
 }
-// função que atualiza a tabela de transações no ecrã
+// atualiza a tabela de transações
 function renderizarTabelaGastos() {
   const tabela = document.getElementById('tabela-transacoes');
   if (!tabela) return;
@@ -53,7 +53,7 @@ function renderizarTabelaGastos() {
   transacoes.forEach((item) => {
     const tr = document.createElement('tr');
 
-    // define a cor da badge consoante
+    // define a cor da badge
     const badgeCor = item.tipo === 'despesa' ? 'bg-danger' : 'bg-success';
     const sinal = item.tipo === 'despesa' ? '-' : '+'; tr.innerHTML = `
       <td>${item.descricao}</td>
@@ -71,5 +71,12 @@ function renderizarTabelaGastos() {
   });
 }
 
-// executa a função
 renderizarTabelaGastos();
+
+//excluir transação
+function removerGasto(id) {
+  let transacoes = carregarDados('transacoes');
+  transacoes = transacoes.filter(item => item.id !== id);
+  salvarDados('transacoes', transacoes);
+  renderizarTabelaGastos();
+}
