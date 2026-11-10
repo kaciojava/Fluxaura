@@ -90,3 +90,20 @@ transacoes.push(novaTransacao);
     //limpa o formulário
     formTransacao.reset();
     alert('Transação registada com sucesso!');
+
+    //INVESTIMENTOS
+    function carregarInvestimentos() {
+  const dados = localStorage.getItem('investimentos');
+  return dados ? JSON.parse(dados) : [];
+}
+
+function salvarInvestimentos(dados) {
+  localStorage.setItem('investimentos', JSON.stringify(dados));
+}
+
+function removerInvestimento(id) {
+  let investimentos = carregarInvestimentos();
+  investimentos = investimentos.filter(item => item.id !== id);
+  salvarInvestimentos(investimentos);
+  renderizarInvestimentos();
+}
