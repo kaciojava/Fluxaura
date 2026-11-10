@@ -80,3 +80,13 @@ function removerGasto(id) {
   salvarDados('transacoes', transacoes);
   renderizarTabelaGastos();
 }
+
+transacoes.push(novaTransacao);
+    salvarDados('transacoes', transacoes);
+
+    // Atualiza a tabela na hora
+    renderizarTabelaGastos();
+
+    //limpa o formulário
+    formTransacao.reset();
+    alert('Transação registada com sucesso!');
